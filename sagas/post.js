@@ -88,7 +88,11 @@ function* uploadImages(action) {
 }
 
 function loadPostsAPI(data) {
-  return axios.get(`/posts?page=${data.page}&limit=10&category_id=${data.category_id}`);
+  return data?.search_word
+    ? axios.get(
+        `/posts?page=${data.page}&limit=10&category_id=${data.category_id}&search_type=${data.search_type}&search_word=${data.search_word}`,
+      )
+    : axios.get(`/posts?page=${data.page}&limit=10&category_id=${data.category_id}`);
 }
 
 function* loadPosts(action) {

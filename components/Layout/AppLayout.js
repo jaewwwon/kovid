@@ -212,6 +212,7 @@ const Container = styled.div`
 `;
 const Content = styled.div`
   @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
+    position: relative;
     padding-left: 310px;
   }
 `;

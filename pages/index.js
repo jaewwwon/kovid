@@ -6,26 +6,30 @@ import Loader from "../components/Content/Loader";
 import Pagination from "rc-pagination";
 import { BREAK_POINT_TABLET } from "../components/Layout/CommonStyle";
 import PostItem from "../components/Content/PostItem";
+import useInput from "../hooks/useInput";
 import { useSelector, useDispatch } from "react-redux";
 // import { END } from "redux-saga";
 import { LOAD_POST_REQUEST, LOAD_CATEGORY_REQUEST } from "../reducers/post";
 // import wrapper from "../store/configureStore";
 
 const Home = () => {
-  const { router, query } = useRouter();
+  const { query } = useRouter();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
   const { posts, postCategory, loadPostLoading } = useSelector((state) => state.post);
+  const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(query?.page || 1);
-
   useEffect(() => {
     dispatch({
       type: LOAD_POST_REQUEST,
       data: {
         page: query?.page || 1,
         category_id: query?.category_id || 1,
+        search_type: "content",
+        search_word: query?.search_word || "",
       },
     });
+    query?.search_word ? setKeyword(query.search_word) : setKeyword("");
   }, [query]);
 
   useEffect(() => {
@@ -41,18 +45,56 @@ const Home = () => {
     [query],
   );
 
+  // 검색어 입력값
+  const onChangeKeyword = useCallback((e) => {
+    setKeyword(e.target.value);
+  }, []);
+
   // 페이지 번호 변경
   const onChangePage = useCallback(
     (page) => {
       window.scrollTo(0, 0); // 스크롤 최상단으로 이동
-      Router.push(`?page=${page}&category_id=${query.category_id || 1}`);
       setPage(page);
+      getRouterQuery(page);
     },
-    [query],
+    [query, keyword],
+  );
+
+  //  검색어 입력값
+  const onSubmitSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (query?.search_word === keyword || (!query?.search_word && keyword.length === 0)) return;
+      setPage(1);
+      getRouterQuery(1);
+    },
+    [keyword, query],
+  );
+
+  const getRouterQuery = useCallback(
+    (pageNumber) => {
+      Router.push(
+        `?page=${pageNumber}&category_id=${query.category_id || 1}${
+          keyword ? `&search_type=content&search_word=${keyword}` : ""
+        }`,
+      );
+    },
+    [query, keyword],
   );
 
   return (
     <Container>
+      <SearchForm className="search_form" positionTop={profile ? 108 : 152}>
+        <form onSubmit={onSubmitSearch}>
+          <input
+            type="text"
+            value={keyword}
+            onChange={onChangeKeyword}
+            placeholder="검색어를 입력하세요."
+          />
+          <button type="submit">검색</button>
+        </form>
+      </SearchForm>
       <nav className="filters">
         <ul>
           {postCategory?.map((category) => (
@@ -153,6 +195,38 @@ const PaginationWrap = styled(Pagination)`
     }
   }
 `;
+const SearchForm = styled.div`
+  margin: 0 0 0 auto;
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    input[type="text"] {
+      width: 75%;
+      height: 38px;
+      padding: 0 8px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+    }
+    button {
+      width: 25%;
+      background-color: #333;
+      border-radius: 0 4px 4px 0;
+      color: #fff;
+    }
+  }
+  @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
+    position: absolute;
+    left: 0;
+    top: ${(props) => `${props.positionTop}px`};
+    width: 280px;
+  }
+  @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
+    max-width: 240px;
+    margin-bottom: 10px;
+  }
+`;
 const Container = styled.div`
   .none_content {
     padding: 55px 0;
@@ -223,7 +297,11 @@ const Container = styled.div`
   }
   @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
     .filters {
-      /* margin: 0 -20px; */
+      margin: 0 -12px;
+      padding: 0;
+      ul {
+        padding: 0 12px;
+      }
     }
     .post_wrap {
       /* margin: 0 -20px; */
