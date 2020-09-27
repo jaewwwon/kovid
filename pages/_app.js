@@ -20,13 +20,20 @@ const App = ({ Component }) => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ9FCXHNPT"></script>
-        <script>
+        {/* <script dangerouslySetInnerHTML>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-
           gtag('config', 'G-QQ9FCXHNPT');
-        </script>
+        </script> */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QQ9FCXHNPT');`,
+          }}
+        />
       </Head>
       <AppLayout>
         <Component />
