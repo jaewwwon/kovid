@@ -8,6 +8,7 @@ export const initialState = {
   logInLoading: false, // 로그인 로딩 상태
   logInError: null, // 로그인 에러 메시지
   logOutError: null, // 로그아웃 에러 메시지
+  updateNicknameSuccess: false, // 닉네임 변경 성공
   updateNicknameError: null, // 닉네임 변경 에러 메시지
   updatePasswordSuccess: false, // 비밀번호 변경 성공
   updatePasswordError: null, // 비밀번호 변경 에러 메시지
@@ -46,6 +47,9 @@ export const LEAVE_USER_FAILURE = "LEAVE_USER_FAILURE";
 export const FIND_PASSWORD_REQUEST = "FIND_PASSWORD_REQUEST";
 export const FIND_PASSWORD_SUCCESS = "FIND_PASSWORD_SUCCESS";
 export const FIND_PASSWORD_FAILURE = "FIND_PASSWORD_FAILURE";
+
+export const NICKNAME_STATE_INIT = "NICKNAME_STATE_INIT";
+export const PASSWORD_STATE_INIT = "PASSWORD_STATE_INIT";
 
 // reducer
 const reducer = (state = initialState, action) => {
@@ -121,15 +125,31 @@ const reducer = (state = initialState, action) => {
         signUpError: action.error,
       };
     }
+    case NICKNAME_STATE_INIT: {
+      return {
+        ...state,
+        updateNicknameSuccess: false,
+        updateNicknameError: null,
+      };
+    }
+    case PASSWORD_STATE_INIT: {
+      return {
+        ...state,
+        updatePasswordSuccess: false,
+        updatePasswordError: null,
+      };
+    }
     case UPDATE_NICKNAME_REQUEST: {
       return {
         ...state,
+        updateNicknameSuccess: false,
         updateNicknameError: null,
       };
     }
     case UPDATE_NICKNAME_SUCCESS: {
       return {
         ...state,
+        updateNicknameSuccess: true,
         profile: {
           ...state.profile,
           user: {

@@ -135,7 +135,7 @@ function* updateNickname(action) {
   } catch (error) {
     yield put({
       type: UPDATE_NICKNAME_FAILURE,
-      error: error,
+      error: error.response.data.code,
     });
   }
 }

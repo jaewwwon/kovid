@@ -24,7 +24,6 @@ const PasswordSection = () => {
   useEffect(() => {
     // 비밀번호 변경에 실패했을 경우
     if (updatePasswordError === "current_password_is_different") {
-      console.log("updatePasswordError", updatePasswordError);
       setPasswordError(true);
     }
   }, [updatePasswordError]);

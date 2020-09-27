@@ -3,24 +3,17 @@ import DefaultErrorPage from "next/error";
 import styled from "styled-components";
 import { Card, BREAK_POINT_TABLET } from "../../components/Layout/CommonStyle";
 import CustomPopup from "../../components/Popup/CustomPopup";
+import NicknameSection from "../../containers/Mypage/NicknameSection";
 import PasswordSection from "../../containers/Mypage/PasswordSection";
-import useInput from "../../hooks/useInput";
 import { useSelector, useDispatch } from "react-redux";
-import { UPDATE_NICKNAME_REQUEST, LEAVE_USER_REQUEST } from "../../reducers/user";
+import { LEAVE_USER_REQUEST } from "../../reducers/user";
 
 const Mypage = () => {
   const dispatch = useDispatch();
-  const { profile } = useSelector((state) => state.user);
-  const [nickname, setNickname] = useState("");
-  const [activeNicknameForm, setActiveNicknameForm] = useState(false);
+  const profile = useSelector((state) => state.user.profile);
   const [onLeavePopup, setOnLeavePopup] = useState(false);
   const [leaveCheckText, setLeaveCheckText] = useState("");
   const [leveTextError, setLeaveTextError] = useState(true);
-
-  useEffect(() => {
-    // 닉네임 초기값 설정
-    if (profile) setNickname(profile.user.profile_nickname);
-  }, [profile]);
 
   // 회원탈퇴 문구 입력 값
   const onChangeLeaveCheckText = useCallback((e) => {
@@ -37,38 +30,6 @@ const Mypage = () => {
     }
     setOnLeavePopup((prev) => !prev);
   }, [onLeavePopup]);
-
-  // 닉네임 변경 폼 활성화 값
-  const onChangeActiveNicknameForm = useCallback(
-    (e) => {
-      if (activeNicknameForm) {
-        setNickname(profile.user.profile_nickname); // 입력값 초기화
-      }
-      setActiveNicknameForm((prev) => !prev);
-    },
-    [activeNicknameForm, profile],
-  );
-
-  // 닉네임 입력 값
-  const onChangeNickname = useCallback((e) => {
-    setNickname(e.target.value);
-  }, []);
-
-  // 닉네임 변경
-  const onSubmitNickname = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!activeNicknameForm) return setActiveNicknameForm(true); // 입력란 활성화
-      dispatch({
-        type: UPDATE_NICKNAME_REQUEST,
-        data: {
-          profile_nickname: nickname,
-        },
-      });
-      onChangeActiveNicknameForm();
-    },
-    [activeNicknameForm, nickname],
-  );
 
   // 회원 탈퇴
   const onSubmitLeave = useCallback(
@@ -93,26 +54,7 @@ const Mypage = () => {
         </div>
         <div className="card-body">
           {/* 닉네임 변경 */}
-          <form onSubmit={onSubmitNickname}>
-            <label htmlFor="nickname">닉네임</label>
-            <div className="input_text">
-              <input
-                id="nickname"
-                type="text"
-                value={nickname}
-                onChange={onChangeNickname}
-                disabled={activeNicknameForm ? false : true}
-              />
-              {activeNicknameForm && (
-                <button className="btn" type="button" onClick={onChangeActiveNicknameForm}>
-                  취소
-                </button>
-              )}
-              <button className="btn" type="submit">
-                변경
-              </button>
-            </div>
-          </form>
+          <NicknameSection />
           {/* 비밀번호 변경 */}
           <PasswordSection />
         </div>
