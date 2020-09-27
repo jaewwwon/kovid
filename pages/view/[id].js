@@ -20,7 +20,6 @@ import wrapper from "../../store/configureStore";
 
 const View = () => {
   const { query, asPath } = useRouter();
-  console.log(asPath);
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
   const { postInfo, comments, loadPostLoading, loadPostDetailError, commentSuccess } = useSelector(
@@ -230,7 +229,7 @@ const Container = styled.div`
         width: 100%;
         height: 80px;
         padding: 10px;
-        border: 0;
+        border: 1px solid #ccc;
         border-radius: 4px;
         background-color: #fff;
       }

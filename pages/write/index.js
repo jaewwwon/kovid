@@ -42,18 +42,17 @@ const Write = () => {
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("categoryId", categoryId);
-      // // 업로드 이미지 id 추출
-      // const imageIds = imageUrls?.map((data) => data.attachId);
-      // dispatch({
-      //   type: WRITE_POST_REQUEST,
-      //   data: {
-      //     category_id: categoryId,
-      //     title,
-      //     content,
-      //     attach_ids: imageIds,
-      //   },
-      // });
+      // 업로드 이미지 id 추출
+      const imageIds = imageUrls?.map((data) => data.attachId);
+      dispatch({
+        type: WRITE_POST_REQUEST,
+        data: {
+          category_id: categoryId,
+          title,
+          content,
+          attach_ids: imageIds,
+        },
+      });
     },
     [imageUrls, categoryId, title, content],
   );
@@ -102,6 +101,7 @@ const Write = () => {
             <input type="text" value={title} onChange={onChangeTitle} placeholder="제목" required />
           </div>
           <textarea
+            id="content"
             rows="10"
             value={content}
             onChange={onChangeContent}
