@@ -19,15 +19,14 @@ const App = ({ Component }) => {
         <meta property="og:image" content="https://ko.kovid19.co.kr/og-image.gif" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EQ5DS4RBGC"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments)}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ9FCXHNPT"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-EQ5DS4RBGC');`,
-          }}
-        ></script>
+
+          gtag('config', 'G-QQ9FCXHNPT');
+        </script>
       </Head>
       <AppLayout>
         <Component />

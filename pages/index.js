@@ -136,7 +136,7 @@ const Home = () => {
         {/* 비로그인 상태에서 버튼 숨김 */}
         {profile && (
           <div className="button_wrap">
-            <Link href="/write">
+            <Link href={`/write${query?.category_id ? `?category_id=${query?.category_id}` : ""}`}>
               <a className="btn">글작성</a>
             </Link>
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import DefaultErrorPage from "next/error";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
@@ -14,10 +14,12 @@ import {
 } from "../../reducers/post";
 
 const Write = () => {
+  const { query } = useRouter();
   const dispatch = useDispatch();
+  const initCategoryId = query?.category_id && query?.category_id !== "1" ? query?.category_id : 2; // 글의 카테고리 설정
   const profile = useSelector((state) => state.user.profile);
   const { postCategory, imageUrls, postLoading } = useSelector((state) => state.post);
-  const [categoryId, onChangeCategoryId] = useInput(2);
+  const [categoryId, onChangeCategoryId] = useInput(initCategoryId);
   const [title, onChangeTitle] = useInput("");
   const [content, onChangeContent] = useInput("");
 
@@ -40,17 +42,18 @@ const Write = () => {
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      // 업로드 이미지 id 추출
-      const imageIds = imageUrls?.map((data) => data.attachId);
-      dispatch({
-        type: WRITE_POST_REQUEST,
-        data: {
-          category_id: categoryId,
-          title,
-          content,
-          attach_ids: imageIds,
-        },
-      });
+      console.log("categoryId", categoryId);
+      // // 업로드 이미지 id 추출
+      // const imageIds = imageUrls?.map((data) => data.attachId);
+      // dispatch({
+      //   type: WRITE_POST_REQUEST,
+      //   data: {
+      //     category_id: categoryId,
+      //     title,
+      //     content,
+      //     attach_ids: imageIds,
+      //   },
+      // });
     },
     [imageUrls, categoryId, title, content],
   );
