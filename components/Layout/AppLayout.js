@@ -58,10 +58,10 @@ const AppLayout = ({ children }) => {
             <Link href="/">
               <a>
                 <img src="/logo-black.gif" alt="" />
-                Kovid
-                <p>
+                코비드바이
+                {/* <p>
                   코로나바이러스 감염증(COVID-19) <span>정보 공유 커뮤니티</span>
-                </p>
+                </p> */}
               </a>
             </Link>
           </h1>
@@ -144,6 +144,7 @@ const Header = styled.div`
       position: relative;
       display: block;
       padding-left: 55px;
+      line-height: 45px;
       font-size: 24px;
       font-weight: 700;
       p {

@@ -6,17 +6,17 @@ const App = ({ Component }) => {
   return (
     <>
       <Head>
-        <title>Kovid</title>
+        <title>코비드바이</title>
         <meta name="description" content="코로나바이러스 감염증(COVID-19) 정보 공유 커뮤니티" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Kovid" />
-        <meta property="og:site_name" content="Kovid" />
+        <meta property="og:title" content="코비드바이" />
+        <meta property="og:site_name" content="코비드바이" />
         <meta
           property="og:description"
           content="코로나바이러스 감염증(COVID-19) 정보 공유 커뮤니티"
         />
-        <meta property="og:url" content="https://ko.kovid19.co.kr/" />
-        <meta property="og:image" content="https://ko.kovid19.co.kr/og-image.gif" />
+        <meta property="og:url" content="https://covid19bye.com/" />
+        <meta property="og:image" content="https://covid19bye.com/og-image.gif" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ9FCXHNPT"></script>
