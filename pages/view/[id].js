@@ -104,11 +104,11 @@ const View = () => {
   return (
     <>
       <Head>
-        <title>{postInfo?.title} | Kovid</title>
+        <title>{postInfo?.title} | 코비드바이</title>
         <meta name="description" content={postInfo?.content.slice(0, 10)} />
-        <meta property="og:title" content={`${postInfo?.title} | Kovid}`} />
+        <meta property="og:title" content={`${postInfo?.title} | 코비드바이}`} />
         <meta property="og:description" content={postInfo?.content.slice(0, 10)} />
-        <meta property="og:url" content={`https://ko.kovid19.co.kr/${asPath.slice(1)}`} />
+        <meta property="og:url" content={`https://covid19bye.com/${asPath.slice(1)}`} />
       </Head>
       <Container>
         <div className="board_content">

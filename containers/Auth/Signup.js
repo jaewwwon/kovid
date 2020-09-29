@@ -17,7 +17,7 @@ const Signup = ({ onChangeSignupPopupState }) => {
   const [useremail, onChangeUseremail] = useInput(""); // 회원 이메일
   const [userpassword, setUserpassword] = useState(""); // 회원 비밀번호
   const [userpasswordCheck, setUserpasswordCheck] = useState(""); // 회원 비밀번호 확인
-  const [termA, onChangeTermA] = useCheck(false); // 프로필 정보 추가 및 수집 동의
+  // const [termA, onChangeTermA] = useCheck(false); // 프로필 정보 추가 및 수집 동의
   const [termB, onChangeTermB] = useCheck(false); // 광고성 정보 수신 동의
   const [termC, onChangeTermC] = useCheck(false); // 개인정보 수집 및 이용약관 동의
   const [termD, onChangeTermD] = useCheck(false); // 서비스 이용약관 동의
@@ -105,7 +105,8 @@ const Signup = ({ onChangeSignupPopupState }) => {
       if (passwordError) return alert("비밀번호가 일치하지 않습니다.");
       if (!isPasswordCheck(userpassword))
         return alert("비밀번호는 최소 8자, 최소 하나의 문자 및 하나의 숫자를 포함해야 합니다.");
-      if (!termA || !termB || !termC || !termD) return alert("약관에 모두 동의해주세요.");
+      // if (!termA || !termB || !termC || !termD) return alert("약관에 모두 동의해주세요.");
+      if (!termB || !termC || !termD) return alert("약관에 모두 동의해주세요.");
       dispatch({
         type: SIGN_UP_REQUEST,
         data: {
@@ -119,7 +120,7 @@ const Signup = ({ onChangeSignupPopupState }) => {
       isUserExist,
       isNicknameExist,
       passwordError,
-      termA,
+      // termA,
       termB,
       termC,
       termD,
@@ -202,13 +203,13 @@ const Signup = ({ onChangeSignupPopupState }) => {
           </div>
           {passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
           <ul className="check_list_field">
-            <li>
+            {/* <li>
               <input id="termA" type="checkbox" value={termA} onChange={onChangeTermA} required />
               <label htmlFor="termA">프로필 정보 추가 수집 동의</label>
               <a href={terms?.additional} target="_blank" title="새창">
                 약관보기
               </a>
-            </li>
+            </li> */}
             <li>
               <input id="termB" type="checkbox" value={termB} onChange={onChangeTermB} required />
               <label htmlFor="termB">광고성 정보 수신 동의</label>

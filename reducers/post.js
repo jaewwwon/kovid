@@ -1,6 +1,7 @@
 import produce from "immer";
 
 export const initialState = {
+  notice: [], // 공지글
   posts: [], // 게시글 리스트
   postCategory: null, // 게시글 카테고리
   postInfo: null, // 게시글 상세정보
@@ -38,6 +39,10 @@ export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
 
 export const DELETE_IMAGE = "DELETE_IMAGE";
+
+export const LOAD_NOTICE_REQUEST = "LOAD_NOTICE_REQUEST";
+export const LOAD_NOTICE_SUCCESS = "LOAD_NOTICE_SUCCESS";
+export const LOAD_NOTICE_FAILURE = "LOAD_NOTICE_FAILURE";
 
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
@@ -145,6 +150,24 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         imageUrls: state.imageUrls.filter((v) => v.attachId !== action.attachId),
+      };
+    }
+    case LOAD_NOTICE_REQUEST: {
+      return {
+        ...state,
+        notice: [],
+      };
+    }
+    case LOAD_NOTICE_SUCCESS: {
+      return {
+        ...state,
+        notice: action.data,
+      };
+    }
+    case LOAD_NOTICE_FAILURE: {
+      return {
+        ...state,
+        notice: [],
       };
     }
     case LOAD_POST_REQUEST: {

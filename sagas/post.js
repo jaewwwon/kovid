@@ -10,6 +10,9 @@ import {
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
+  LOAD_NOTICE_REQUEST,
+  LOAD_NOTICE_SUCCESS,
+  LOAD_NOTICE_FAILURE,
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
@@ -83,6 +86,26 @@ function* uploadImages(action) {
     yield put({
       type: UPLOAD_IMAGES_FAILURE,
       error: error.response.data,
+    });
+  }
+}
+
+function loadNoticeAPI(data) {
+  return axios.get(`/notices/1`);
+}
+
+function* loadNotice() {
+  try {
+    const result = yield call(loadNoticeAPI);
+    yield put({
+      type: LOAD_NOTICE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_NOTICE_FAILURE,
+      error: err.response.data,
     });
   }
 }
@@ -387,6 +410,11 @@ function* watchUploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
 }
 
+// 공지사항 불러오기
+function* watchLoadNotice() {
+  yield takeLatest(LOAD_NOTICE_REQUEST, loadNotice);
+}
+
 // 게시글 목록 불러오기
 function* watchLoadPosts() {
   yield takeLatest(LOAD_POST_REQUEST, loadPosts);
@@ -451,6 +479,7 @@ export default function* postSaga() {
   yield all([
     fork(watchLoadCategory),
     fork(watchUploadImages),
+    fork(watchLoadNotice),
     fork(watchLoadPosts),
     fork(watchWritePost),
     fork(watchUpdatePost),

@@ -5,21 +5,24 @@ import styled from "styled-components";
 import Loader from "../components/Content/Loader";
 import Pagination from "rc-pagination";
 import { BREAK_POINT_TABLET } from "../components/Layout/CommonStyle";
+import NoticeItem from "../components/Content/NoticeItem";
 import PostItem from "../components/Content/PostItem";
-import useInput from "../hooks/useInput";
 import { useSelector, useDispatch } from "react-redux";
 // import { END } from "redux-saga";
-import { LOAD_POST_REQUEST, LOAD_CATEGORY_REQUEST } from "../reducers/post";
+import { LOAD_NOTICE_REQUEST, LOAD_POST_REQUEST, LOAD_CATEGORY_REQUEST } from "../reducers/post";
 // import wrapper from "../store/configureStore";
 
 const Home = () => {
   const { query } = useRouter();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
-  const { posts, postCategory, loadPostLoading } = useSelector((state) => state.post);
+  const { notice, posts, postCategory, loadPostLoading } = useSelector((state) => state.post);
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(query?.page || 1);
   useEffect(() => {
+    dispatch({
+      type: LOAD_NOTICE_REQUEST,
+    });
     dispatch({
       type: LOAD_POST_REQUEST,
       data: {
@@ -116,11 +119,15 @@ const Home = () => {
           <Loader />
         ) : (
           <>
+            {/* 공지사항 */}
+            <NoticeItem post={notice} />
+            {/* 게시글 */}
             {posts.post_count > 0 ? (
               posts.posts?.map((post) => <PostItem key={post.post_id} post={post} />)
             ) : (
               <p className="none_content">현재 카테고리에 관련된 게시글이 없습니다.</p>
             )}
+            {/* 페이지네이션 */}
             {posts.post_count >= 10 && (
               <PaginationWrap
                 current={page}
