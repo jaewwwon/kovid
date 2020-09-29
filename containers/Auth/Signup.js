@@ -21,7 +21,8 @@ const Signup = ({ onChangeSignupPopupState }) => {
   const [termB, onChangeTermB] = useCheck(false); // 광고성 정보 수신 동의
   const [termC, onChangeTermC] = useCheck(false); // 개인정보 수집 및 이용약관 동의
   const [termD, onChangeTermD] = useCheck(false); // 서비스 이용약관 동의
-  const [isUserExist, setIsUserExist] = useState(null); // 회원 중복확인
+  const [isUserExist, setIsUserExist] = useState(null); // 회원(이메일) 중복
+  const [isNicknameExist, setIsNicknameExist] = useState(null); // 닉네임 중복
   const [passwordError, setPasswordError] = useState(false); // 비밀번호 에러
 
   useEffect(() => {
@@ -82,11 +83,25 @@ const Signup = ({ onChangeSignupPopupState }) => {
       .catch(() => setIsUserExist(true));
   }, [useremail]);
 
+  // 닉네임 중복확인
+  const onNicknameCheck = useCallback(async () => {
+    if (username.length === 0) return alert("닉네임을 입력하세요.");
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/users/nickname`, {
+        profile_nickname: username,
+      })
+      .then(() => setIsNicknameExist(false))
+      .catch(() => setIsNicknameExist(true));
+  }, [username]);
+
   // 회원가입
   const onSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
       if (isUserExist === null) return alert("이메일 중복확인을 진행해주세요.");
+      if (isUserExist) return alert("사용할 수 없는 이메일입니다.");
+      if (isNicknameExist === null) return alert("닉네임 중복확인을 진행해주세요.");
+      if (isNicknameExist) return alert("사용할 수 없는 닉네임입니다.");
       if (passwordError) return alert("비밀번호가 일치하지 않습니다.");
       if (!isPasswordCheck(userpassword))
         return alert("비밀번호는 최소 8자, 최소 하나의 문자 및 하나의 숫자를 포함해야 합니다.");
@@ -100,7 +115,18 @@ const Signup = ({ onChangeSignupPopupState }) => {
         },
       });
     },
-    [isUserExist, passwordError, termA, termB, termC, termD, username, userpassword, useremail],
+    [
+      isUserExist,
+      isNicknameExist,
+      passwordError,
+      termA,
+      termB,
+      termC,
+      termD,
+      username,
+      userpassword,
+      useremail,
+    ],
   );
 
   return (
@@ -131,15 +157,24 @@ const Signup = ({ onChangeSignupPopupState }) => {
           </div>
           <div className="input_field">
             <label htmlFor="nickname">닉네임</label>
-            <input
-              id="nickname"
-              className="input_text"
-              type="text"
-              value={username}
-              onChange={onChangeUsername}
-              placeholder="닉네임"
-              required
-            />
+            <div className="input_check">
+              <input
+                id="nickname"
+                className="input_text"
+                type="text"
+                value={username}
+                onChange={onChangeUsername}
+                placeholder="닉네임"
+                required
+              />
+              <button className="btn" type="button" onClick={onNicknameCheck}>
+                중복확인
+              </button>
+            </div>
+            {isNicknameExist === false && (
+              <ErrorMessage textColor="#0497cd">사용가능한 닉네임입니다.</ErrorMessage>
+            )}
+            {isNicknameExist === true && <ErrorMessage>사용 불가능한 닉네임입니다.</ErrorMessage>}
           </div>
           <div className="input_field">
             <label htmlFor="password">비밀번호</label>
