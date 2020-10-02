@@ -9,16 +9,16 @@ import NoticeItem from "../components/Content/NoticeItem";
 import PostItem from "../components/Content/PostItem";
 import { useSelector, useDispatch } from "react-redux";
 // import { END } from "redux-saga";
-import { LOAD_NOTICE_REQUEST, LOAD_POST_REQUEST, LOAD_CATEGORY_REQUEST } from "../reducers/post";
+import { LOAD_NOTICE_REQUEST, LOAD_POST_REQUEST } from "../reducers/post";
 // import wrapper from "../store/configureStore";
 
 const Home = () => {
   const { query } = useRouter();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user.profile);
-  const { notice, posts, postCategory, loadPostLoading } = useSelector((state) => state.post);
-  const [keyword, setKeyword] = useState("");
+  const { notice, posts, loadPostLoading } = useSelector((state) => state.post);
   const [page, setPage] = useState(query?.page || 1);
+
   useEffect(() => {
     dispatch({
       type: LOAD_NOTICE_REQUEST,
@@ -32,26 +32,8 @@ const Home = () => {
         search_word: query?.search_word || "",
       },
     });
-    query?.search_word ? setKeyword(query.search_word) : setKeyword("");
+    if (query?.page === "1") setPage(1);
   }, [query]);
-
-  useEffect(() => {
-    // 게시글 카테고리 불러오기
-    if (!postCategory) dispatch({ type: LOAD_CATEGORY_REQUEST });
-  }, [postCategory]);
-
-  // 카테고리를 선택했을 경우
-  const onClickCategory = useCallback(
-    (categoryId) => {
-      if (query.category_id !== categoryId) Router.push(`?category_id=${categoryId}`);
-    },
-    [query],
-  );
-
-  // 검색어 입력값
-  const onChangeKeyword = useCallback((e) => {
-    setKeyword(e.target.value);
-  }, []);
 
   // 페이지 번호 변경
   const onChangePage = useCallback(
@@ -60,60 +42,22 @@ const Home = () => {
       setPage(page);
       getRouterQuery(page);
     },
-    [query, keyword],
-  );
-
-  //  검색어 입력값
-  const onSubmitSearch = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (query?.search_word === keyword || (!query?.search_word && keyword.length === 0)) return;
-      setPage(1);
-      getRouterQuery(1);
-    },
-    [keyword, query],
+    [query],
   );
 
   const getRouterQuery = useCallback(
     (pageNumber) => {
       Router.push(
         `?page=${pageNumber}&category_id=${query.category_id || 1}${
-          keyword ? `&search_type=content&search_word=${keyword}` : ""
+          query?.search_word ? `&search_type=content&search_word=${query.search_word}` : ""
         }`,
       );
     },
-    [query, keyword],
+    [query],
   );
 
   return (
     <Container>
-      <SearchForm className="search_form" positionTop={profile ? 108 : 152}>
-        <form onSubmit={onSubmitSearch}>
-          <input
-            type="text"
-            value={keyword}
-            onChange={onChangeKeyword}
-            placeholder="검색어를 입력하세요."
-          />
-          <button type="submit">검색</button>
-        </form>
-      </SearchForm>
-      <nav className="filters">
-        <ul>
-          {postCategory?.map((category) => (
-            <li
-              key={category.idx}
-              className={
-                (query?.category_id || "1") === String(category.idx) ? "active" : undefined
-              }
-            >
-              <button type="button" onClick={() => onClickCategory(String(category.idx))}>
-                {category.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
       <div className="post_wrap">
         {loadPostLoading ? (
           <Loader />
@@ -202,77 +146,12 @@ const PaginationWrap = styled(Pagination)`
     }
   }
 `;
-const SearchForm = styled.div`
-  margin: 0 0 0 auto;
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 14px;
-    input[type="text"] {
-      width: 75%;
-      height: 38px;
-      padding: 0 8px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 4px 0 0 4px;
-    }
-    button {
-      width: 25%;
-      background-color: #333;
-      border-radius: 0 4px 4px 0;
-      color: #fff;
-    }
-  }
-  @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
-    position: absolute;
-    left: 0;
-    top: ${(props) => `${props.positionTop}px`};
-    width: 280px;
-  }
-  @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
-    max-width: 240px;
-    margin-bottom: 10px;
-  }
-`;
 const Container = styled.div`
   .none_content {
     padding: 55px 0;
     font-size: 14px;
     color: #7f858a;
     text-align: center;
-  }
-  .filters {
-    padding: 0 12px;
-    border-bottom: 1px solid #d6dadd;
-    ul {
-      white-space: nowrap;
-      overflow-x: auto;
-      li {
-        display: inline-block;
-        button {
-          position: relative;
-          display: block;
-          margin-right: 24px;
-          padding: 14px 0;
-          border: 0;
-          font-size: 14px;
-        }
-      }
-      li.active {
-        button {
-          font-weight: 700;
-        }
-        button:after {
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 3px;
-          background-color: #f6c52f;
-        }
-      }
-    }
   }
   .post_wrap {
     position: relative;
@@ -296,22 +175,14 @@ const Container = styled.div`
     .post_wrap {
       .button_wrap {
         position: absolute;
-        top: -42px;
+        top: -34px;
         right: 0;
         text-align: right;
       }
     }
   }
   @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
-    .filters {
-      margin: 0 -12px;
-      padding: 0;
-      ul {
-        padding: 0 12px;
-      }
-    }
     .post_wrap {
-      /* margin: 0 -20px; */
       .button_wrap {
         text-align: center;
         margin-top: 24px;

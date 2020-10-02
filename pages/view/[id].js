@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import styled from "styled-components";
 import Loader from "../../components/Content/Loader";
 import DefaultErrorPage from "next/error";
@@ -164,6 +164,11 @@ const View = () => {
             ))}
           </ol>
         </div>
+        <div className="btn_wrap">
+          <button type="button" onClick={() => Router.back()}>
+            목록으로
+          </button>
+        </div>
       </Container>
     </>
   );
@@ -202,7 +207,7 @@ const Container = styled.div`
     }
     .board_utils {
       position: absolute;
-      right: 35px;
+      right: 40px;
       top: 17px;
       & > * {
         display: inline-block;
@@ -277,18 +282,27 @@ const Container = styled.div`
       }
     }
   }
+  .btn_wrap {
+    margin-top: 35px;
+    text-align: center;
+    button {
+      padding: 4px 10px;
+      background-color: #f1f2f4;
+      font-size: 14px;
+    }
+  }
   @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
     .board_content {
-      margin: 0 -20px;
-      padding: 0 20px;
+      padding: 0;
       border: 0;
       .board_utils {
-        top: -28px;
+        top: -30px;
+        right: 0;
       }
     }
     .board_comment {
-      margin: 20px -20px 0;
-      padding: 25px 20px;
+      margin: 20px -12px 0;
+      padding: 25px 12px 40px;
     }
   }
 `;

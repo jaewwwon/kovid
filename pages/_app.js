@@ -1,5 +1,5 @@
 import Head from "next/head";
-import AppLayout from "../components/Layout/AppLayout";
+import AppContainer from "../containers/App/Container";
 import wrapper from "../store/configureStore";
 
 const App = ({ Component }) => {
@@ -35,9 +35,9 @@ const App = ({ Component }) => {
           }}
         />
       </Head>
-      <AppLayout>
+      <AppContainer>
         <Component />
-      </AppLayout>
+      </AppContainer>
       {/* 커스텀 팝업 생성 위치 */}
       <div id="modalRoot" />
     </>

@@ -8,22 +8,23 @@ const PostItem = ({ post }) => {
   const allPostCategory = query?.category_id === undefined || query?.category_id === "1";
   return (
     <Post>
-      <Link href="/view/[id]" as={`/view/${post.post_id}`}>
+      <Link
+        href={`/view/[id]?category_id=${query?.category_id || "1"}`}
+        as={`/view/${post.post_id}?category_id=${query?.category_id || "1"}`}
+      >
         <a>
           <div className="write_info">
             <p className="nickname">{post.nickname}</p>
             <p className="date">{post.date}</p>
           </div>
-          <p className="title">
-            {allPostCategory && `[${post.category_name}] `}
-            {post.title}
-          </p>
+          <p className="title">{post.title}</p>
           <p className="content">{post.content}</p>
-          <p className="utils">
+          <div className="utils">
+            <p>{allPostCategory && post.category_name} 카테고리</p>
             <span>댓글 {post.comment_count}</span>
             <span>좋아요 {post.liked}</span>
             <span>싫어요 {post.disliked}</span>
-          </p>
+          </div>
           {post?.thumbnail && <img className="thumbnail" src={post.thumbnail} alt="게시글 사진" />}
         </a>
       </Link>
@@ -75,6 +76,9 @@ const Post = styled.div`
   }
   .utils {
     font-size: 12px;
+    p {
+      margin-bottom: 5px;
+    }
     span + span {
       position: relative;
       margin-left: 10px;

@@ -77,8 +77,9 @@ const Update = () => {
     [imageList],
   );
 
-  // 로그인 상태가 아닐 경우, 404 페이지 리턴
-  if (!profile) return <DefaultErrorPage statusCode={404} />;
+  // 글의 작성자가 아닐경우, 404 페이지 리턴
+  if (!profile || profile?.user?.profile_nickname !== postInfo?.nickname)
+    return <DefaultErrorPage statusCode={404} />;
 
   return (
     <Container>

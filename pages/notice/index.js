@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import styled from "styled-components";
 import { BREAK_POINT_TABLET } from "../../components/Layout/CommonStyle";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,12 +37,26 @@ const Notice = () => {
           </div>
           <pre className="board_desc">{notice?.content}</pre>
         </div>
+        <div className="btn_wrap">
+          <button type="button" onClick={() => Router.back()}>
+            목록으로
+          </button>
+        </div>
       </Container>
     </>
   );
 };
 
 const Container = styled.div`
+  .btn_wrap {
+    margin-top: 35px;
+    text-align: center;
+    button {
+      padding: 4px 10px;
+      background-color: #f1f2f4;
+      font-size: 14px;
+    }
+  }
   .board_content {
     position: relative;
     padding: 45px 40px 25px 40px;
@@ -73,95 +87,11 @@ const Container = styled.div`
     .board_img {
       margin-top: 5px;
     }
-    .board_utils {
-      position: absolute;
-      right: 35px;
-      top: 17px;
-      & > * {
-        display: inline-block;
-        background-color: #fff;
-        border: 0;
-        line-height: 24px;
-      }
-      & > * + * {
-        margin-left: 15px;
-      }
-    }
-  }
-  .board_comment {
-    margin-top: 20px;
-    padding: 40px;
-    border-radius: 4px;
-    background-color: #f1f2f4;
-    font-size: 14px;
-    color: #727579;
-    form {
-      position: relative;
-      margin-top: 10px;
-      textarea {
-        width: 100%;
-        height: 80px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #fff;
-      }
-      button {
-        position: absolute;
-        right: 5px;
-        bottom: 5px;
-        padding: 5px 20px;
-        background-color: #fff;
-        border: 1px solid #727579;
-        border-radius: 20px;
-        font-weight: 500;
-        font-size: 12px;
-      }
-    }
-    .comment_list {
-      margin-top: 20px;
-      li + li {
-        margin-top: 20px;
-      }
-      .write_info {
-        font-size: 12px;
-        span + span {
-          margin-left: 10px;
-        }
-      }
-      .comment {
-        margin-top: 10px;
-        font-size: 14px;
-        line-height: 1.43;
-        word-break: keep-all;
-        white-space: pre-wrap;
-      }
-      .comment_btns {
-        margin-top: 10px;
-        button {
-          background-color: transparent;
-          border: 0;
-          font-size: 12px;
-          color: #727579;
-        }
-        button + button {
-          margin-left: 10px;
-        }
-      }
-    }
   }
   @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
     .board_content {
-      margin: 0 -20px;
-      padding: 0 20px;
+      padding: 0;
       border: 0;
-      .board_utils {
-        top: -28px;
-      }
-    }
-    .board_comment {
-      margin: 20px -20px 0;
-      padding: 25px 20px;
     }
   }
 `;

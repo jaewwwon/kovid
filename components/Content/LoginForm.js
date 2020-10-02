@@ -49,11 +49,8 @@ const LoginForm = ({
 
 const Container = styled.div`
   @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
-    z-index: 1;
-    position: absolute;
-    left: 40px;
-    top: 0;
-    width: 280px;
+    position: relative;
+    margin-bottom: 20px;
     padding: 24px 10px;
     background-color: #f5f5f6;
     border: 1px solid #ccc;

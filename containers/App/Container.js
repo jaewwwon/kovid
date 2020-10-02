@@ -1,18 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import styled from "styled-components";
-import { PageInner, BREAK_POINT_TABLET } from "./CommonStyle";
-import CustomPopup from "../Popup/CustomPopup";
-import LoginForm from "../Content/LoginForm";
-import Signin from "../../containers/Auth/Signin";
-import Signup from "../../containers/Auth/Signup";
-import FindPassword from "../../containers/Auth/FindPassword";
+import { PageInner, BREAK_POINT_TABLET } from "../../components/Layout/CommonStyle";
+import PostSearchForm from "../../components/Content/PostSearchForm";
+import PostCategorys from "../../components/Content/PostCategorys";
+import CustomPopup from "../../components/Popup/CustomPopup";
+import LoginForm from "../../components/Content/LoginForm";
+import Signin from "../Auth/Signin";
+import Signup from "../Auth/Signup";
+import FindPassword from "../Auth/FindPassword";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_USER_INFO, LOG_OUT_REQUEST } from "../../reducers/user";
+import { LOAD_CATEGORY_REQUEST } from "../../reducers/post";
 
-const AppLayout = ({ children }) => {
+const AppContainer = ({ children }) => {
   const dispatch = useDispatch();
+  const { pathname } = useRouter();
   const { profile } = useSelector((state) => state.user);
+  const postCategory = useSelector((state) => state.post.postCategory);
 
   const [onSigninPopup, setOnSigninPopup] = useState(false); // 로그인 팝업 활성화 상태
   const [onSignupPopup, setOnSignupPopup] = useState(false); // 회원가입 팝업 활성화 상태
@@ -26,7 +32,9 @@ const AppLayout = ({ children }) => {
         data: JSON.parse(sessionStorage.getItem("authToken")),
       });
     }
-  }, []);
+    // 게시글 카테고리 불러오기
+    if (!postCategory) dispatch({ type: LOAD_CATEGORY_REQUEST });
+  }, [postCategory]);
 
   // 로그인 팝업 상태 변경
   const onChangeSigninPopupState = () => {
@@ -54,17 +62,6 @@ const AppLayout = ({ children }) => {
     <>
       <Header>
         <PageInner>
-          <h1 className="logo">
-            <Link href="/">
-              <a>
-                <img src="/logo-black.gif" alt="" />
-                코비드바이
-                <p>
-                  코로나바이러스 감염증(COVID-19) <span>정보 공유 커뮤니티</span>
-                </p>
-              </a>
-            </Link>
-          </h1>
           <div className="utils mobile_view">
             {profile ? (
               <>
@@ -89,17 +86,34 @@ const AppLayout = ({ children }) => {
               </>
             )}
           </div>
+          <h1 className="logo">
+            <Link href="/">
+              <a>
+                <img src="/logo-black.gif" alt="" />
+                코비드바이
+                <p>코로나바이러스 감염증(COVID-19) 정보 공유 커뮤니티</p>
+              </a>
+            </Link>
+          </h1>
         </PageInner>
       </Header>
       <Container>
         <PageInner>
-          <LoginForm
-            onChangeSignupPopupState={onChangeSignupPopupState}
-            onChangeSigninPopupState={onChangeSigninPopupState}
-            onChangeFindPasswordState={onChangeFindPasswordState}
-            onUserLogout={onUserLogout}
-          />
-          <Content>{children}</Content>
+          <div className="app_utils">
+            <LoginForm
+              onChangeSignupPopupState={onChangeSignupPopupState}
+              onChangeSigninPopupState={onChangeSigninPopupState}
+              onChangeFindPasswordState={onChangeFindPasswordState}
+              onUserLogout={onUserLogout}
+            />
+            {pathname === "/" && (
+              <>
+                <PostSearchForm />
+                <PostCategorys />
+              </>
+            )}
+          </div>
+          <div className="app_content">{children}</div>
         </PageInner>
       </Container>
       <Footer>
@@ -135,11 +149,9 @@ const AppLayout = ({ children }) => {
   );
 };
 
-const Header = styled.div`
-  padding: 14px 0;
+const Header = styled.header`
   border-bottom: 1px solid #c9c9c9;
   .logo {
-    float: left;
     a {
       position: relative;
       display: block;
@@ -162,62 +174,76 @@ const Header = styled.div`
       }
     }
   }
-  .utils {
-    button {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 28px;
-    }
-    button + button {
-      margin-left: 12px;
-    }
-    .user_info {
-      vertical-align: sub;
-      font-weight: 700;
-      span {
-        position: relative;
-        bottom: 2px;
-        margin-left: 4px;
-      }
-    }
-    .user_info + button {
-      margin-left: 12px;
-      font-weight: 400;
-      color: #727579;
-    }
-  }
+
   @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
-    .utils {
-      float: right;
+    padding: 14px 0;
+    .logo {
+      float: left;
     }
   }
   @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
+    padding: 8px 0 14px;
     .logo {
-      p {
-        span {
-          display: block;
+      a {
+        padding-left: 46px;
+        font-size: 18px;
+        p {
+          font-size: 12px;
+        }
+        img {
+          width: 36px;
         }
       }
     }
     .utils {
-      position: absolute;
-      right: 20px;
-      top: 0;
+      text-align: right;
+      button {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 28px;
+      }
+      button + button {
+        margin-left: 12px;
+      }
+      .user_info {
+        vertical-align: sub;
+        font-weight: 700;
+        span {
+          position: relative;
+          bottom: 2px;
+          margin-left: 4px;
+        }
+      }
+      .user_info + button {
+        margin-left: 12px;
+        font-weight: 400;
+        color: #727579;
+      }
     }
   }
 `;
 const Container = styled.div`
-  position: relative;
+  /* position: relative; */
   min-height: calc(100vh - 203px);
   padding: 45px 0;
-`;
-const Content = styled.div`
   @media only screen and (min-width: ${BREAK_POINT_TABLET + 1}px) {
-    position: relative;
-    padding-left: 310px;
+    .app_utils {
+      float: left;
+      width: 280px;
+    }
+    .app_content {
+      float: left;
+      padding-left: 45px;
+      width: calc(100% - 280px);
+    }
+  }
+  @media only screen and (max-width: ${BREAK_POINT_TABLET}px) {
+    .app_utils {
+      /* display: none; */
+    }
   }
 `;
-const Footer = styled.div`
+const Footer = styled.footer`
   padding: 65px 0;
   background-color: #0f1215;
   font-size: 14px;
@@ -233,4 +259,4 @@ const Footer = styled.div`
   }
 `;
 
-export default AppLayout;
+export default AppContainer;
