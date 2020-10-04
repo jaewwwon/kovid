@@ -20,7 +20,7 @@ const PostItem = ({ post }) => {
           <p className="title">{post.title}</p>
           <p className="content">{post.content}</p>
           <div className="utils">
-            <p>{allPostCategory && post.category_name} 카테고리</p>
+            <p>{allPostCategory && `${post.category_name} 카테고리`}</p>
             <span>댓글 {post.comment_count}</span>
             <span>좋아요 {post.liked}</span>
             <span>싫어요 {post.disliked}</span>
