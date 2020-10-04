@@ -236,6 +236,9 @@ const Header = styled.header`
         font-weight: 400;
         color: #727579;
       }
+      button + button {
+        margin-left: 12px;
+      }
     }
   }
 `;
