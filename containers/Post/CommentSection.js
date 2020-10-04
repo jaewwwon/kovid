@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
+import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_COMMENT_REQUEST, DELETE_COMMENT_REQUEST } from "../../reducers/post";
 
@@ -53,12 +54,16 @@ const CommentSection = ({ post_id, comment }) => {
 
   return (
     <>
-      <p className="write_info">
-        <span>
-          <b>{comment.nickname}</b>
-        </span>
-        <span>{comment.date}</span>
-      </p>
+      <div className="write_info">
+        <Link href="/user/posts/[id]" as={`/user/posts/${comment?.user_id}`}>
+          <a>
+            <span>
+              <b>{comment.nickname}</b>
+            </span>
+            <span>{comment.date}</span>
+          </a>
+        </Link>
+      </div>
       {!isFormOpen ? (
         <pre className="comment">{comment.content}</pre>
       ) : (

@@ -22,6 +22,12 @@ const LoginForm = ({
                 내정보 설정 <span className="material-icons">lock</span>
               </a>
             </Link>
+            <Link href="/user/posts/[id]" as={`/user/posts/${profile?.user.idx}`}>
+              <a>작성한 글</a>
+            </Link>
+            <Link href="/user/comments/[id]" as={`/user/comments/${profile?.user.idx}`}>
+              <a>댓글 단 글</a>
+            </Link>
           </div>
           <button className="logout_button" type="button" onClick={onUserLogout}>
             로그아웃
@@ -100,6 +106,13 @@ const Container = styled.div`
       .material-icons {
         font-size: 12px;
         vertical-align: bottom;
+      }
+      a + a {
+        margin-left: 8px;
+      }
+      a + a:before {
+        content: "·";
+        margin-right: 8px;
       }
     }
     .logout_button {

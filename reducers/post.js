@@ -27,6 +27,9 @@ export const initialState = {
   commentLoading: false, // 댓글 (작성, 수정, 삭제) 로딩 상태
   commentSuccess: false, // 댓글 (작성, 수정, 삭제) 완료 상태
   commentError: null, // 댓글 (작성, 수정, 삭제) 에러 메시지
+  userComments: [], // 특정 회원이 작성한 댓글
+  loadUserCommentLoading: false,
+  loadUserCommentError: null,
 };
 
 // action name
@@ -47,6 +50,14 @@ export const LOAD_NOTICE_FAILURE = "LOAD_NOTICE_FAILURE";
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
 export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
+
+export const LOAD_USER_POST_REQUEST = "LOAD_USER_POST_REQUEST";
+export const LOAD_USER_POST_SUCCESS = "LOAD_USER_POST_SUCCESS";
+export const LOAD_USER_POST_FAILURE = "LOAD_USER_POST_FAILURE";
+
+export const LOAD_USER_COMMENT_REQUEST = "LOAD_USER_COMMENT_REQUEST";
+export const LOAD_USER_COMMENT_SUCCESS = "LOAD_USER_COMMENT_SUCCESS";
+export const LOAD_USER_COMMENT_FAILURE = "LOAD_USER_COMMENT_FAILURE";
 
 export const LOAD_POST_DETAIL_REQUEST = "LOAD_POST_DETAIL_REQUEST";
 export const LOAD_POST_DETAIL_SUCCESS = "LOAD_POST_DETAIL_SUCCESS";
@@ -191,6 +202,52 @@ const reducer = (state = initialState, action) => {
         loadPostLoading: false,
         loadPostError: action.error,
         posts: [],
+      };
+    }
+    case LOAD_USER_POST_REQUEST: {
+      return {
+        ...state,
+        loadPostLoading: true,
+        loadPostError: null,
+        posts: [],
+      };
+    }
+    case LOAD_USER_POST_SUCCESS: {
+      return {
+        ...state,
+        loadPostLoading: false,
+        posts: action.data,
+      };
+    }
+    case LOAD_USER_POST_FAILURE: {
+      return {
+        ...state,
+        loadPostLoading: false,
+        loadPostError: action.error,
+        posts: [],
+      };
+    }
+    case LOAD_USER_COMMENT_REQUEST: {
+      return {
+        ...state,
+        loadUserCommentLoading: true,
+        loadUserCommentError: null,
+        userComments: [],
+      };
+    }
+    case LOAD_USER_COMMENT_SUCCESS: {
+      return {
+        ...state,
+        loadUserCommentLoading: false,
+        userComments: action.data,
+      };
+    }
+    case LOAD_USER_COMMENT_FAILURE: {
+      return {
+        ...state,
+        loadUserCommentLoading: false,
+        loadUserCommentError: action.error,
+        userComments: [],
       };
     }
     case LOAD_POST_DETAIL_REQUEST: {

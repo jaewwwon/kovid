@@ -16,6 +16,12 @@ import {
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
+  LOAD_USER_POST_REQUEST,
+  LOAD_USER_POST_SUCCESS,
+  LOAD_USER_POST_FAILURE,
+  LOAD_USER_COMMENT_REQUEST,
+  LOAD_USER_COMMENT_SUCCESS,
+  LOAD_USER_COMMENT_FAILURE,
   LOAD_POST_DETAIL_REQUEST,
   LOAD_POST_DETAIL_SUCCESS,
   LOAD_POST_DETAIL_FAILURE,
@@ -129,6 +135,50 @@ function* loadPosts(action) {
     console.error(err);
     yield put({
       type: LOAD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadUserPostsAPI(data) {
+  return axios.get(
+    `/users/${data.user_idx}/posts?limit=10&category_id=${data.category_id}&page=${data.page}`,
+  );
+}
+
+function* loadUserPosts(action) {
+  try {
+    const result = yield call(loadUserPostsAPI, action.data);
+    yield put({
+      type: LOAD_USER_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_USER_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadUserCommentsAPI(data) {
+  return axios.get(
+    `/users/${data.user_idx}/comments?limit=10&category_id=${data.category_id}&page=${data.page}`,
+  );
+}
+
+function* loadUserComments(action) {
+  try {
+    const result = yield call(loadUserCommentsAPI, action.data);
+    yield put({
+      type: LOAD_USER_COMMENT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_USER_COMMENT_FAILURE,
       error: err.response.data,
     });
   }
@@ -420,6 +470,16 @@ function* watchLoadPosts() {
   yield takeLatest(LOAD_POST_REQUEST, loadPosts);
 }
 
+// 특정 회원의 게시글 목록 불러오기
+function* watchLoadUserPosts() {
+  yield takeLatest(LOAD_USER_POST_REQUEST, loadUserPosts);
+}
+
+// 특정 회원의 댓글 목록 불러오기
+function* watchLoadUserComments() {
+  yield takeLatest(LOAD_USER_COMMENT_REQUEST, loadUserComments);
+}
+
 // 게시글 상세 불러오기
 function* watchLoadPostDetail() {
   yield takeLatest(LOAD_POST_DETAIL_REQUEST, loadPostDetail);
@@ -481,6 +541,8 @@ export default function* postSaga() {
     fork(watchUploadImages),
     fork(watchLoadNotice),
     fork(watchLoadPosts),
+    fork(watchLoadUserPosts),
+    fork(watchLoadUserComments),
     fork(watchWritePost),
     fork(watchUpdatePost),
     fork(watchDeletePost),

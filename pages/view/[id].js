@@ -114,10 +114,14 @@ const View = () => {
         <div className="board_content">
           <h2 className="board_title">{postInfo?.title}</h2>
           <div className="write_info">
-            <span>
-              <b>{postInfo?.nickname}</b>
-            </span>
-            <span>{postInfo?.date}</span>
+            <Link href="/user/posts/[id]" as={`/user/posts/${postInfo?.user_id}`}>
+              <a>
+                <span>
+                  <b>{postInfo?.nickname}</b>
+                </span>
+                <span>{postInfo?.date}</span>
+              </a>
+            </Link>
           </div>
           <pre className="board_desc">{postInfo?.content}</pre>
           {postInfo?.attachs?.map((data) => (
@@ -189,8 +193,6 @@ const Container = styled.div`
     .write_info {
       margin-top: 10px;
       span {
-        position: relative;
-
         color: #727579;
       }
       span + span {
