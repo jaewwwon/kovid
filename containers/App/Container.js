@@ -20,6 +20,7 @@ const AppContainer = ({ children }) => {
   const { profile } = useSelector((state) => state.user);
   const postCategory = useSelector((state) => state.post.postCategory);
 
+  const [onNavPopup, setOnNavPopup] = useState(false); // 모바일 메뉴 팝업 활성화 상태
   const [onSigninPopup, setOnSigninPopup] = useState(false); // 로그인 팝업 활성화 상태
   const [onSignupPopup, setOnSignupPopup] = useState(false); // 회원가입 팝업 활성화 상태
   const [onFindPasswordPopup, setOnFindPasswordPopup] = useState(false); // 비밀번호 찾기 팝업 활성화 상태
@@ -35,6 +36,11 @@ const AppContainer = ({ children }) => {
     // 게시글 카테고리 불러오기
     if (!postCategory) dispatch({ type: LOAD_CATEGORY_REQUEST });
   }, [postCategory]);
+
+  // 모바일 메뉴 팝업 활성화 상태
+  const onChangeNavPopupState = () => {
+    setOnNavPopup((prev) => !prev);
+  };
 
   // 로그인 팝업 상태 변경
   const onChangeSigninPopupState = () => {
@@ -65,12 +71,16 @@ const AppContainer = ({ children }) => {
           <div className="utils mobile_view">
             {profile ? (
               <>
-                <Link href="/mypage">
-                  <a className="user_info">
+                {/* <Link href="/mypage">
+                  <a>
                     {profile.user.profile_nickname} 님
                     <span className="material-icons">expand_more</span>
                   </a>
-                </Link>
+                </Link> */}
+                <button className="user_info" type="button" onClick={onChangeNavPopupState}>
+                  {profile.user.profile_nickname} 님
+                  <span className="material-icons">expand_more</span>
+                </button>
                 <button type="button" onClick={onUserLogout}>
                   로그아웃
                 </button>
@@ -124,6 +134,22 @@ const AppContainer = ({ children }) => {
           <p>&copy; Kovid. ALL RIGHTS RESERVED</p>
         </PageInner>
       </Footer>
+      {/* 모바일 메뉴 팝업 */}
+      {onNavPopup && (
+        <CustomPopup onClosePopup={onChangeNavPopupState}>
+          <PopupContent>
+            <Link href="/mypage">
+              <a onClick={() => onChangeNavPopupState()}>내정보 설정</a>
+            </Link>
+            <Link href="/user/posts/[id]" as={`/user/posts/${profile?.user.idx}`}>
+              <a onClick={() => onChangeNavPopupState()}>작성한 글</a>
+            </Link>
+            <Link href="/user/comments/[id]" as={`/user/comments/${profile?.user.idx}`}>
+              <a onClick={() => onChangeNavPopupState()}>댓글 단 글</a>
+            </Link>
+          </PopupContent>
+        </CustomPopup>
+      )}
       {/* 로그인 팝업 */}
       {onSigninPopup && (
         <CustomPopup onClosePopup={onChangeSigninPopupState}>
@@ -196,22 +222,13 @@ const Header = styled.header`
       }
     }
     .utils {
+      font-size: 14px;
       text-align: right;
-      button {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 28px;
-      }
-      button + button {
-        margin-left: 12px;
-      }
       .user_info {
-        vertical-align: sub;
         font-weight: 700;
         span {
-          position: relative;
-          bottom: 2px;
           margin-left: 4px;
+          font-size: 20px;
         }
       }
       .user_info + button {
@@ -256,6 +273,21 @@ const Footer = styled.footer`
   }
   p + p {
     margin-top: 7px;
+  }
+`;
+const PopupContent = styled.div`
+  margin-top: 20px;
+  a {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    background-color: #f5f5f6;
+    border: 1px solid #dee2e6;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 48px;
+    text-align: center;
   }
 `;
 
