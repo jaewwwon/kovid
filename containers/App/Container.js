@@ -116,7 +116,7 @@ const AppContainer = ({ children }) => {
               onChangeFindPasswordState={onChangeFindPasswordState}
               onUserLogout={onUserLogout}
             />
-            {pathname === "/" && (
+            {(pathname === "/" || pathname === "/view/[id]") && (
               <>
                 <PostSearchForm />
                 <PostCategorys />
@@ -156,6 +156,7 @@ const AppContainer = ({ children }) => {
           <Signin
             onChangeSigninPopupState={onChangeSigninPopupState}
             onChangeFindPasswordState={onChangeFindPasswordState}
+            onChangeSignupPopupState={onChangeSignupPopupState}
           />
         </CustomPopup>
       )}

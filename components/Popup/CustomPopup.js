@@ -128,6 +128,13 @@ const PopupLayout = styled.div`
         margin-top: 10px;
       }
     }
+    .popup_utils {
+      margin-top: 12px;
+      text-align: right;
+      .btn {
+        margin-left: 10px;
+      }
+    }
   }
   .close_button {
     position: absolute;

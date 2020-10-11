@@ -5,7 +5,11 @@ import useInput from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 import { LOG_IN_REQUEST } from "../../reducers/user";
 
-const Signin = ({ onChangeSigninPopupState, onChangeFindPasswordState }) => {
+const Signin = ({
+  onChangeSigninPopupState,
+  onChangeFindPasswordState,
+  onChangeSignupPopupState,
+}) => {
   const dispatch = useDispatch();
   const { profile, logInLoading, logInError } = useSelector((state) => state.user);
 
@@ -61,9 +65,14 @@ const Signin = ({ onChangeSigninPopupState, onChangeFindPasswordState }) => {
             />
           </div>
           {/* {logInError && <ErrorMessage>로그인 정보가 일치하지 않습니다.</ErrorMessage>} */}
-          <button type="button" onClick={onChangeFindPasswordState} style={{ marginTop: "8px" }}>
-            비밀번호 찾기
-          </button>
+          <div className="popup_utils">
+            <button className="btn" type="button" onClick={onChangeSignupPopupState}>
+              회원가입
+            </button>
+            <button className="btn" type="button" onClick={onChangeFindPasswordState}>
+              비밀번호 찾기
+            </button>
+          </div>
           <div className="popup_btns">
             <button type="submit" className="btn">
               {logInLoading && <Loader className="material-icons">autorenew</Loader>}
