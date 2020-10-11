@@ -8,15 +8,16 @@ import DefaultErrorPage from "next/error";
 import { BREAK_POINT_TABLET } from "../../components/Layout/CommonStyle";
 import LikedSection from "../../containers/Post/LikedSection";
 import CommentSection from "../../containers/Post/CommentSection";
+import autolink from "../../util/autolink";
 import { useDispatch, useSelector } from "react-redux";
-import { END } from "redux-saga";
+// import { END } from "redux-saga";
 import {
   LOAD_POST_DETAIL_REQUEST,
   LOAD_COMMENT_REQUEST,
   WRITE_COMMENT_REQUEST,
   DELETE_POST_REQUEST,
 } from "../../reducers/post";
-import wrapper from "../../store/configureStore";
+// import wrapper from "../../store/configureStore";
 
 const View = () => {
   const { query, asPath } = useRouter();
@@ -123,7 +124,13 @@ const View = () => {
               </a>
             </Link>
           </div>
-          <pre className="board_desc">{postInfo?.content}</pre>
+          {/* <pre className="board_desc">{postInfo?.content}</pre> */}
+          {postInfo?.content && (
+            <pre
+              className="board_desc"
+              dangerouslySetInnerHTML={{ __html: autolink(postInfo.content) }}
+            />
+          )}
           {postInfo?.attachs?.map((data) => (
             <p key={data.id} className="board_img">
               <img src={data.url} alt="첨부사진" />

@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import Link from "next/link";
+import autolink from "../../util/autolink";
 import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_COMMENT_REQUEST, DELETE_COMMENT_REQUEST } from "../../reducers/post";
 
@@ -65,7 +66,7 @@ const CommentSection = ({ post_id, comment }) => {
         </Link>
       </div>
       {!isFormOpen ? (
-        <pre className="comment">{comment.content}</pre>
+        <pre className="comment" dangerouslySetInnerHTML={{ __html: autolink(comment.content) }} />
       ) : (
         <form onSubmit={onSubmitForm}>
           <textarea
