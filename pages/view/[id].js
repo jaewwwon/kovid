@@ -210,6 +210,12 @@ const Container = styled.div`
       min-height: 155px;
       margin-top: 15px;
       line-height: 1.45;
+      a {
+        color: #0000ee;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
     .board_img {
       margin-top: 5px;
@@ -276,6 +282,12 @@ const Container = styled.div`
         line-height: 1.43;
         word-break: keep-all;
         white-space: pre-wrap;
+        a {
+          color: #0000ee;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
       }
       .comment_btns {
         margin-top: 10px;
