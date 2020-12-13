@@ -1,6 +1,5 @@
 # 코비드바이
-<https://covid19bye.com/>
-코로나바이러스 감염증(COVID-19) 정보 공유 커뮤니티
+코로나바이러스 감염증(COVID-19) 정보 공유 커뮤니티 <https://covid19bye.com/>
 
 ## 폴더 구조
 
